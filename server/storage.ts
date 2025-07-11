@@ -1,6 +1,19 @@
-import { assessments, medicalProtocols, type Assessment, type InsertAssessment, type MedicalProtocol, type InsertMedicalProtocol } from "@shared/schema";
+import { 
+  assessments, 
+  medicalProtocols,
+  usageAnalytics,
+  callReductionMetrics,
+  type Assessment, 
+  type InsertAssessment, 
+  type MedicalProtocol, 
+  type InsertMedicalProtocol,
+  type UsageAnalytics,
+  type InsertUsageAnalytics,
+  type CallReductionMetrics,
+  type InsertCallReductionMetrics
+} from "@shared/schema";
 import { db } from "./db";
-import { eq, and } from "drizzle-orm";
+import { eq, and, sql, gte, lte, count, desc } from "drizzle-orm";
 
 export interface IStorage {
   getAssessment(id: number): Promise<Assessment | undefined>;
@@ -8,6 +21,14 @@ export interface IStorage {
   getMedicalProtocol(symptom: string, ageGroup: string): Promise<MedicalProtocol | undefined>;
   getAllMedicalProtocols(): Promise<MedicalProtocol[]>;
   createMedicalProtocol(protocol: InsertMedicalProtocol): Promise<MedicalProtocol>;
+  
+  // Analytics and tracking methods
+  getDailyUsageAnalytics(date: string): Promise<UsageAnalytics | undefined>;
+  updateDailyUsageAnalytics(analytics: InsertUsageAnalytics): Promise<UsageAnalytics>;
+  getMonthlyCallReductionMetrics(month: string): Promise<CallReductionMetrics | undefined>;
+  updateMonthlyCallReductionMetrics(metrics: InsertCallReductionMetrics): Promise<CallReductionMetrics>;
+  getUsageAnalyticsRange(startDate: string, endDate: string): Promise<UsageAnalytics[]>;
+  getCallReductionTrends(months: number): Promise<CallReductionMetrics[]>;
 }
 
 export class MemStorage implements IStorage {
@@ -329,6 +350,10 @@ export class MemStorage implements IStorage {
     const assessment: Assessment = {
       ...insertAssessment,
       id,
+      sessionId: insertAssessment.sessionId || null,
+      userAgent: insertAssessment.userAgent || null,
+      ipAddress: insertAssessment.ipAddress || null,
+      completedAt: insertAssessment.completedAt || null,
       createdAt: new Date().toISOString(),
     };
     this.assessments.set(id, assessment);
@@ -353,6 +378,31 @@ export class MemStorage implements IStorage {
     const key = `${protocol.symptom}-${protocol.ageGroup}`;
     this.medicalProtocols.set(key, protocol);
     return protocol;
+  }
+
+  // Stub implementations for analytics (not used in memory storage)
+  async getDailyUsageAnalytics(date: string): Promise<UsageAnalytics | undefined> {
+    return undefined;
+  }
+
+  async updateDailyUsageAnalytics(analytics: InsertUsageAnalytics): Promise<UsageAnalytics> {
+    throw new Error("Analytics not supported in memory storage");
+  }
+
+  async getMonthlyCallReductionMetrics(month: string): Promise<CallReductionMetrics | undefined> {
+    return undefined;
+  }
+
+  async updateMonthlyCallReductionMetrics(metrics: InsertCallReductionMetrics): Promise<CallReductionMetrics> {
+    throw new Error("Analytics not supported in memory storage");
+  }
+
+  async getUsageAnalyticsRange(startDate: string, endDate: string): Promise<UsageAnalytics[]> {
+    return [];
+  }
+
+  async getCallReductionTrends(months: number): Promise<CallReductionMetrics[]> {
+    return [];
   }
 }
 
@@ -391,6 +441,80 @@ export class DatabaseStorage implements IStorage {
       .values(insertProtocol)
       .returning();
     return protocol;
+  }
+
+  // Analytics and tracking implementations
+  async getDailyUsageAnalytics(date: string): Promise<UsageAnalytics | undefined> {
+    const [analytics] = await db
+      .select()
+      .from(usageAnalytics)
+      .where(eq(usageAnalytics.date, date));
+    return analytics || undefined;
+  }
+
+  async updateDailyUsageAnalytics(analyticsData: InsertUsageAnalytics): Promise<UsageAnalytics> {
+    const existing = await this.getDailyUsageAnalytics(analyticsData.date);
+    
+    if (existing) {
+      const [updated] = await db
+        .update(usageAnalytics)
+        .set(analyticsData)
+        .where(eq(usageAnalytics.date, analyticsData.date))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(usageAnalytics)
+        .values(analyticsData)
+        .returning();
+      return created;
+    }
+  }
+
+  async getMonthlyCallReductionMetrics(month: string): Promise<CallReductionMetrics | undefined> {
+    const [metrics] = await db
+      .select()
+      .from(callReductionMetrics)
+      .where(eq(callReductionMetrics.month, month));
+    return metrics || undefined;
+  }
+
+  async updateMonthlyCallReductionMetrics(metricsData: InsertCallReductionMetrics): Promise<CallReductionMetrics> {
+    const existing = await this.getMonthlyCallReductionMetrics(metricsData.month);
+    
+    if (existing) {
+      const [updated] = await db
+        .update(callReductionMetrics)
+        .set(metricsData)
+        .where(eq(callReductionMetrics.month, metricsData.month))
+        .returning();
+      return updated;
+    } else {
+      const [created] = await db
+        .insert(callReductionMetrics)
+        .values(metricsData)
+        .returning();
+      return created;
+    }
+  }
+
+  async getUsageAnalyticsRange(startDate: string, endDate: string): Promise<UsageAnalytics[]> {
+    return await db
+      .select()
+      .from(usageAnalytics)
+      .where(and(
+        gte(usageAnalytics.date, startDate),
+        lte(usageAnalytics.date, endDate)
+      ))
+      .orderBy(usageAnalytics.date);
+  }
+
+  async getCallReductionTrends(months: number): Promise<CallReductionMetrics[]> {
+    return await db
+      .select()
+      .from(callReductionMetrics)
+      .orderBy(desc(callReductionMetrics.month))
+      .limit(months);
   }
 }
 
