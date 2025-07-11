@@ -1,4 +1,6 @@
 import { assessments, medicalProtocols, type Assessment, type InsertAssessment, type MedicalProtocol, type InsertMedicalProtocol } from "@shared/schema";
+import { db } from "./db";
+import { eq, and } from "drizzle-orm";
 
 export interface IStorage {
   getAssessment(id: number): Promise<Assessment | undefined>;
@@ -354,4 +356,42 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+export class DatabaseStorage implements IStorage {
+  async getAssessment(id: number): Promise<Assessment | undefined> {
+    const [assessment] = await db.select().from(assessments).where(eq(assessments.id, id));
+    return assessment || undefined;
+  }
+
+  async createAssessment(insertAssessment: InsertAssessment): Promise<Assessment> {
+    const [assessment] = await db
+      .insert(assessments)
+      .values({
+        ...insertAssessment,
+        createdAt: new Date().toISOString()
+      })
+      .returning();
+    return assessment;
+  }
+
+  async getMedicalProtocol(symptom: string, ageGroup: string): Promise<MedicalProtocol | undefined> {
+    const [protocol] = await db
+      .select()
+      .from(medicalProtocols)
+      .where(and(eq(medicalProtocols.symptom, symptom), eq(medicalProtocols.ageGroup, ageGroup)));
+    return protocol || undefined;
+  }
+
+  async getAllMedicalProtocols(): Promise<MedicalProtocol[]> {
+    return await db.select().from(medicalProtocols);
+  }
+
+  async createMedicalProtocol(insertProtocol: InsertMedicalProtocol): Promise<MedicalProtocol> {
+    const [protocol] = await db
+      .insert(medicalProtocols)
+      .values(insertProtocol)
+      .returning();
+    return protocol;
+  }
+}
+
+export const storage = new DatabaseStorage();

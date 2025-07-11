@@ -53,18 +53,38 @@ export function AfterHoursChecklist() {
         {checklistItems.map((section, index) => {
           const Icon = section.icon;
           return (
-            <Card key={index} className={`border-${section.color}-200 bg-${section.color}-50`}>
+            <Card key={index} className={
+              section.color === "blue" ? "border-blue-200 bg-blue-50" :
+              section.color === "orange" ? "border-orange-200 bg-orange-50" :
+              "border-red-200 bg-red-50"
+            }>
               <CardHeader className="pb-4">
-                <CardTitle className={`text-base flex items-center text-${section.color}-800`}>
-                  <Icon className={`w-5 h-5 mr-2 text-${section.color}-600`} />
+                <CardTitle className={`text-base flex items-center ${
+                  section.color === "blue" ? "text-blue-800" :
+                  section.color === "orange" ? "text-orange-800" :
+                  "text-red-800"
+                }`}>
+                  <Icon className={`w-5 h-5 mr-2 ${
+                    section.color === "blue" ? "text-blue-600" :
+                    section.color === "orange" ? "text-orange-600" :
+                    "text-red-600"
+                  }`} />
                   {section.title}
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <ul className="space-y-2">
                   {section.items.map((item, itemIndex) => (
-                    <li key={itemIndex} className={`text-sm text-${section.color}-700 flex items-start`}>
-                      <CheckCircle className={`w-4 h-4 mr-2 mt-0.5 text-${section.color}-500 flex-shrink-0`} />
+                    <li key={itemIndex} className={`text-sm flex items-start ${
+                      section.color === "blue" ? "text-blue-700" :
+                      section.color === "orange" ? "text-orange-700" :
+                      "text-red-700"
+                    }`}>
+                      <CheckCircle className={`w-4 h-4 mr-2 mt-0.5 flex-shrink-0 ${
+                        section.color === "blue" ? "text-blue-500" :
+                        section.color === "orange" ? "text-orange-500" :
+                        "text-red-500"
+                      }`} />
                       {item}
                     </li>
                   ))}
