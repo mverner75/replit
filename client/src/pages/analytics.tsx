@@ -2,7 +2,9 @@ import { useQuery } from "@tanstack/react-query";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
-import { Activity, Users, Phone, AlertTriangle, TrendingUp, Calendar } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Activity, Users, Phone, AlertTriangle, TrendingUp, Calendar, Home } from "lucide-react";
+import { Link } from "wouter";
 
 interface AnalyticsDashboard {
   last30Days: {
@@ -79,10 +81,18 @@ export default function Analytics() {
             Impact metrics and usage insights for after-hours pediatric care
           </p>
         </div>
-        <Badge variant="secondary" className="flex items-center gap-2">
-          <Calendar className="h-4 w-4" />
-          Last updated: {new Date(analytics.generated).toLocaleString()}
-        </Badge>
+        <div className="flex items-center gap-4">
+          <Badge variant="secondary" className="flex items-center gap-2">
+            <Calendar className="h-4 w-4" />
+            Last updated: {new Date(analytics.generated).toLocaleString()}
+          </Badge>
+          <Link href="/">
+            <Button variant="outline" className="flex items-center gap-2">
+              <Home className="h-4 w-4" />
+              Home
+            </Button>
+          </Link>
+        </div>
       </div>
 
       {/* Key Metrics Cards */}
