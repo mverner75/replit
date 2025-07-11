@@ -47,7 +47,12 @@ function checkEmergencyConditions(
   
   // Breathing difficulties
   const breathingResponse = responses.find(r => r.questionId === "breathing");
+  const colorResponse = responses.find(r => r.questionId === "color_changes");
+  const speakingResponse = responses.find(r => r.questionId === "speaking");
+  
   if (breathingResponse?.value === true || breathingResponse?.value === "yes") return true;
+  if (colorResponse?.value === true || colorResponse?.value === "yes") return true;
+  if (speakingResponse?.value === "Cannot speak") return true;
   
   // Rash emergency conditions
   if (symptom === "rash") {
@@ -56,6 +61,40 @@ function checkEmergencyConditions(
     
     const spreadingResponse = responses.find(r => r.questionId === "spreading");
     if (spreadingResponse?.value === "Rapidly spreading") return true;
+  }
+  
+  // Ear pain emergency conditions
+  if (symptom === "ear_pain") {
+    const drainageResponse = responses.find(r => r.questionId === "drainage");
+    if (drainageResponse?.value === "Blood") return true;
+  }
+  
+  // Vomiting/Diarrhea emergency conditions
+  if (symptom === "vomiting_diarrhea") {
+    const bloodResponse = responses.find(r => r.questionId === "blood_in_stool");
+    const dehydrationResponse = responses.find(r => r.questionId === "dehydration_signs");
+    const fluidResponse = responses.find(r => r.questionId === "fluid_intake");
+    
+    if (bloodResponse?.value === true || bloodResponse?.value === "yes") return true;
+    if (dehydrationResponse?.value === "Severe - won't wake up") return true;
+    if (fluidResponse?.value === "Nothing staying down") return true;
+  }
+  
+  // Injury emergency conditions
+  if (symptom === "injury") {
+    const severityResponse = responses.find(r => r.questionId === "injury_severity");
+    const bleedingResponse = responses.find(r => r.questionId === "bleeding");
+    const consciousnessResponse = responses.find(r => r.questionId === "consciousness");
+    
+    if (severityResponse?.value === "Very severe - bone visible") return true;
+    if (bleedingResponse?.value === "Heavy bleeding that won't stop") return true;
+    if (consciousnessResponse?.value === false || consciousnessResponse?.value === "no") return true;
+  }
+  
+  // Sore throat emergency conditions
+  if (symptom === "sore_throat") {
+    const difficultyResponse = responses.find(r => r.questionId === "difficulty_breathing_throat");
+    if (difficultyResponse?.value === "Cannot swallow/breathe") return true;
   }
   
   return false;

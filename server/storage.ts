@@ -133,6 +133,183 @@ export class MemStorage implements IStorage {
           call_doctor: ["Persistent cough >2 weeks", "Fever with cough", "Coughing up blood", "Barking cough"],
           home_care: ["Mild dry cough", "Recent cold symptoms", "Cough improving over time"]
         }
+      },
+      // Ear Pain protocols
+      {
+        symptom: "ear_pain",
+        ageGroup: "infant",
+        questions: [
+          {
+            id: "pain_level",
+            text: "How would you describe your child's ear pain?",
+            type: "multiple_choice",
+            options: ["Mild discomfort", "Moderate pain", "Severe pain/crying", "Extreme pain"]
+          },
+          {
+            id: "fever_with_ear",
+            text: "Does your child have a fever with the ear pain?",
+            type: "yes_no"
+          },
+          {
+            id: "drainage",
+            text: "Is there any discharge coming from the ear?",
+            type: "multiple_choice",
+            options: ["No discharge", "Clear fluid", "Yellow/green discharge", "Blood"]
+          },
+          {
+            id: "hearing_changes",
+            text: "Have you noticed any hearing changes?",
+            type: "yes_no"
+          }
+        ],
+        guidelines: {
+          emergency: ["Blood from ear", "Severe pain with high fever", "Signs of meningitis"],
+          call_doctor: ["Moderate to severe pain", "Fever with ear pain", "Yellow/green discharge", "Hearing changes"],
+          home_care: ["Mild ear discomfort", "No fever", "No discharge"]
+        }
+      },
+      // Vomiting/Diarrhea protocols
+      {
+        symptom: "vomiting_diarrhea",
+        ageGroup: "toddler",
+        questions: [
+          {
+            id: "duration_gi",
+            text: "How long have the symptoms lasted?",
+            type: "multiple_choice",
+            options: ["Less than 6 hours", "6-12 hours", "12-24 hours", "More than 24 hours"]
+          },
+          {
+            id: "dehydration_signs",
+            text: "Are there signs of dehydration?",
+            type: "multiple_choice",
+            options: ["None - normal activity", "Mild - less active", "Moderate - very sleepy", "Severe - won't wake up"]
+          },
+          {
+            id: "blood_in_stool",
+            text: "Is there blood in the vomit or stool?",
+            type: "yes_no"
+          },
+          {
+            id: "fluid_intake",
+            text: "Is your child able to keep fluids down?",
+            type: "multiple_choice",
+            options: ["Yes, drinking normally", "Some fluids staying down", "Very little staying down", "Nothing staying down"]
+          }
+        ],
+        guidelines: {
+          emergency: ["Blood in vomit/stool", "Severe dehydration", "Nothing staying down >12 hours", "Severe abdominal pain"],
+          call_doctor: ["Moderate dehydration", "Symptoms >24 hours", "Unable to keep most fluids down"],
+          home_care: ["Mild symptoms", "Good fluid intake", "Normal activity level"]
+        }
+      },
+      // Minor Injury protocols
+      {
+        symptom: "injury",
+        ageGroup: "child",
+        questions: [
+          {
+            id: "injury_type",
+            text: "What type of injury occurred?",
+            type: "multiple_choice",
+            options: ["Cut/scrape", "Bump/bruise", "Sprain/strain", "Possible fracture", "Head injury", "Burn"]
+          },
+          {
+            id: "injury_severity",
+            text: "How severe is the injury?",
+            type: "multiple_choice",
+            options: ["Minor - small cut/bruise", "Moderate - larger wound", "Severe - deep cut/deformity", "Very severe - bone visible"]
+          },
+          {
+            id: "bleeding",
+            text: "Is there active bleeding?",
+            type: "multiple_choice",
+            options: ["No bleeding", "Stopped bleeding", "Light bleeding", "Heavy bleeding that won't stop"]
+          },
+          {
+            id: "consciousness",
+            text: "Is your child fully alert and responsive?",
+            type: "yes_no"
+          }
+        ],
+        guidelines: {
+          emergency: ["Heavy bleeding won't stop", "Loss of consciousness", "Severe deformity", "Head injury with vomiting"],
+          call_doctor: ["Deep cuts needing stitches", "Possible fracture", "Burns larger than quarter", "Persistent pain"],
+          home_care: ["Minor cuts/scrapes", "Small bruises", "Light bleeding stopped"]
+        }
+      },
+      // Breathing Difficulties
+      {
+        symptom: "breathing",
+        ageGroup: "child",
+        questions: [
+          {
+            id: "breathing_difficulty",
+            text: "How is your child's breathing?",
+            type: "multiple_choice",
+            options: ["Normal breathing", "Slightly labored", "Moderate difficulty", "Severe difficulty"]
+          },
+          {
+            id: "wheezing",
+            text: "Is there wheezing or whistling sounds?",
+            type: "yes_no"
+          },
+          {
+            id: "color_changes",
+            text: "Are the lips or face turning blue?",
+            type: "yes_no"
+          },
+          {
+            id: "speaking",
+            text: "Can your child speak in full sentences?",
+            type: "multiple_choice",
+            options: ["Yes, normal speech", "Short phrases only", "Single words only", "Cannot speak"]
+          }
+        ],
+        guidelines: {
+          emergency: ["Blue lips/face", "Cannot speak", "Severe breathing difficulty", "Unresponsive"],
+          call_doctor: ["Moderate breathing difficulty", "Persistent wheezing", "Short phrases only"],
+          home_care: ["Mild breathing changes", "Normal color", "Can speak normally"]
+        }
+      },
+      // Sore Throat
+      {
+        symptom: "sore_throat",
+        ageGroup: "child",
+        questions: [
+          {
+            id: "throat_pain",
+            text: "How severe is the throat pain?",
+            type: "multiple_choice",
+            options: ["Mild scratchiness", "Moderate pain", "Severe pain swallowing", "Cannot swallow"]
+          },
+          {
+            id: "fever_throat",
+            text: "Is there a fever with the sore throat?",
+            type: "yes_no"
+          },
+          {
+            id: "white_patches",
+            text: "Do you see white patches or pus on the throat?",
+            type: "yes_no"
+          },
+          {
+            id: "swollen_glands",
+            text: "Are the neck glands swollen?",
+            type: "yes_no"
+          },
+          {
+            id: "difficulty_breathing_throat",
+            text: "Is there any difficulty breathing or swallowing?",
+            type: "multiple_choice",
+            options: ["No difficulty", "Mild difficulty swallowing", "Significant difficulty", "Cannot swallow/breathe"]
+          }
+        ],
+        guidelines: {
+          emergency: ["Cannot swallow/breathe", "Severe difficulty breathing", "High fever with severe pain"],
+          call_doctor: ["White patches with fever", "Severe pain", "Swollen glands", "Difficulty swallowing"],
+          home_care: ["Mild throat pain", "No fever", "Can swallow normally"]
+        }
       }
     ];
 

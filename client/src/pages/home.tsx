@@ -7,6 +7,8 @@ import { SymptomCards } from "@/components/symptom-cards";
 import { TemperatureConverter } from "@/components/temperature-converter";
 import { MedicationCalculator } from "@/components/medication-calculator";
 import { EmergencyGuidelines } from "@/components/emergency-guidelines";
+import { HomeCareGuide } from "@/components/home-care-guide";
+import { AfterHoursChecklist } from "@/components/after-hours-checklist";
 import { Info, ExternalLink } from "lucide-react";
 
 export default function Home() {
@@ -64,6 +66,10 @@ export default function Home() {
         </div>
 
         <EmergencyGuidelines />
+
+        <AfterHoursChecklist />
+
+        <HomeCareGuide />
 
         {/* Resources Section */}
         <div className="bg-white rounded-xl shadow-sm p-6">

@@ -2,7 +2,22 @@
 
 ## Overview
 
-PediTriage is a full-stack web application designed to provide evidence-based guidance for pediatric symptoms when doctors' offices are closed. The application helps parents and caregivers assess common pediatric symptoms through structured questionnaires and provides recommendations for appropriate care levels (home care, call doctor, or emergency).
+PediTriage is a comprehensive full-stack web application designed to reduce after-hours pediatric calls by providing evidence-based guidance for common childhood symptoms. The application helps parents and caregivers assess 8 major symptom categories through structured questionnaires and provides recommendations for appropriate care levels (home care, call doctor, or emergency), along with comprehensive home care guidance.
+
+## Recent Changes (January 2025)
+
+✅ **Expanded Symptom Coverage**: Added 5 new symptom types beyond fever, rash, and cough:
+- Ear pain/infections (most common after-hours call)
+- Vomiting/diarrhea (GI symptoms) 
+- Minor injuries (30% of pediatric ED visits)
+- Breathing difficulties (emergency watch symptoms)
+- Sore throat (strep screening)
+
+✅ **Enhanced Medical Protocols**: Added comprehensive decision trees with age-specific guidelines for all new symptoms
+
+✅ **Home Care Resources**: Added home care guide and after-hours decision checklist to empower parents with self-care knowledge
+
+✅ **Improved UI**: Updated symptom cards layout to accommodate 8 symptoms in responsive grid format
 
 ## User Preferences
 
